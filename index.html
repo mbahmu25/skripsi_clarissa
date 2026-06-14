@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <title>WebGIS Guidebook & Routing</title>
+    <title>WebGIS Guidebook & Routing - Belakang Padang</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     
     <script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
@@ -10,50 +10,60 @@
     
     <style>
         :root {
-            --main: rgba(251, 173, 38, 1);
+            /* Tema Warna Aksen berbasis #faf2e6 */
+            --bg-accent: #faf2e6;
+            --bg-accent-light: #fffdfa;
+            --bg-accent-dark: #e6dac2;
+            --text-main: #3d352e;
+            --route-blue: #0055ff;
+            --main: rgba(251, 173, 38, 1); /* Warna utama dari preferensimu sebelumnya */
         }
+        
         body { margin: 0; padding: 0; font-family: sans-serif; }
         #map { position: absolute; top: 0; bottom: 0; width: 100%; }
         
         /* UI Panel Styling */
         .map-overlay {
             position: absolute;
-            background: #fff;
-            padding: 10px;
+            background: var(--bg-accent);
+            color: var(--text-main);
+            padding: 12px;
             border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border: 1px solid var(--bg-accent-dark);
             z-index: 1;
+            font-size: 13px;
         }
 
-        /* Basemap Selector */
-        #basemap-menu {
-            top: 10px;
-            left: 10px;
-        }
+        #basemap-menu { top: 10px; left: 10px; }
+        #legend { bottom: 30px; left: 10px; max-width: 280px; }
+        
+        .legend-title { font-weight: bold; margin-bottom: 8px; display: block; font-size: 14px;}
+        .legend-item { display: flex; align-items: center; margin-bottom: 6px; }
+        .legend-color { width: 14px; height: 14px; margin-right: 10px; border-radius: 50%; border: 1px solid #ccc; }
+        .legend-line { width: 14px; height: 4px; margin-right: 10px; border-radius: 2px; }
 
-        /* Legend */
-        #legend {
-            bottom: 30px;
-            left: 10px;
-        }
-        .legend-item { display: flex; align-items: center; margin-bottom: 5px; }
-        .legend-color { width: 15px; height: 15px; margin-right: 8px; border-radius: 50%; }
-
-        /* Instructions */
         #instructions {
             top: 10px;
             right: 50px;
             max-width: 250px;
-            border-left: 4px solid var(--main);
+            border-left: 5px solid var(--text-main);
+            background: linear-gradient(135deg, var(--bg-accent), var(--bg-accent-light));
         }
 
-        select { padding: 5px; border-radius: 4px; border: 1px solid #ccc; }
+        select { 
+            padding: 6px; border-radius: 4px; border: 1px solid var(--bg-accent-dark); 
+            background-color: var(--bg-accent-light); color: var(--text-main);
+            width: 100%; margin-top: 5px; font-weight: bold;
+        }
+        
         .btn-reset {
             margin-top: 10px; padding: 8px; width: 100%;
-            background-color: var(--main); color: #fff;
+            background-color: var(--text-main); color: var(--bg-accent);
             border: none; border-radius: 4px; cursor: pointer;
-            font-weight: bold;
+            font-weight: bold; transition: all 0.2s ease;
         }
+        .btn-reset:hover { background-color: #5c5046; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
@@ -61,7 +71,7 @@
 <div id="map"></div>
 
 <div id="basemap-menu" class="map-overlay">
-    <label for="layer-select"><b>Pilih Basemap:</b></label><br>
+    <label for="layer-select"><b>Pilih Basemap:</b></label>
     <select id="layer-select" onchange="changeBasemap(this.value)">
         <option value="streets-v12">Streets</option>
         <option value="satellite-streets-v12">Satellite</option>
@@ -72,73 +82,98 @@
 
 <div id="instructions" class="map-overlay">
     <b>Panduan Rute:</b>
-    <p style="font-size: 12px; margin: 5px 0;">1. Klik sembarang tempat di peta untuk titik awal (Start).</p>
-    <p style="font-size: 12px; margin: 5px 0;">2. Klik titik destinasi (marker biru) untuk membuat rute.</p>
+    <p style="margin: 5px 0;">1. Klik sembarang tempat di peta untuk <b>Titik Awal</b>.</p>
+    <p style="margin: 5px 0;">2. Klik titik destinasi untuk menarik rute otomatis.</p>
     <button class="btn-reset" onclick="resetRoute()">Reset Rute</button>
 </div>
 
 <div id="legend" class="map-overlay">
-    <b>Legenda Guidebook</b>
-    <div class="legend-item" style="margin-top: 8px;">
-        <div class="legend-color" style="background: #007cbf;"></div>
-        <span>Titik Destinasi (KMZ)</span>
-    </div>
+    <span class="legend-title">Legenda Guidebook</span>
+    
+    <div class="legend-item"><div class="legend-color" style="background: #e74c3c;"></div><span>Atraksi Wisata Tangible</span></div>
+    <div class="legend-item"><div class="legend-color" style="background: #3498db;"></div><span>Akses Boat</span></div>
+    <div class="legend-item"><div class="legend-color" style="background: #f1c40f;"></div><span>Akomodasi</span></div>
+    <div class="legend-item"><div class="legend-color" style="background: #2ecc71;"></div><span>Restoran dan Rekreasi</span></div>
+    <div class="legend-item"><div class="legend-color" style="background: #9b59b6;"></div><span>Ancillary Services</span></div>
+    
+    <hr style="border: 0; border-top: 1px solid var(--bg-accent-dark); margin: 8px 0;">
+    
+    <div class="legend-item"><div class="legend-line" style="background: #111111;"></div><span>Rute Kapal (Hitam)</span></div>
+    <div class="legend-item"><div class="legend-line" style="background: #0088ff;"></div><span>Rute Kapal (Biru)</span></div>
+    
+    <hr style="border: 0; border-top: 1px solid var(--bg-accent-dark); margin: 8px 0;">
+
+    <div class="legend-item"><div class="legend-color" style="background: #333333;"></div><span>Lokasi Kamu (Start)</span></div>
     <div class="legend-item">
-        <div class="legend-color" style="background: #e74c3c;"></div>
-        <span>Lokasi Kamu (Start)</span>
-    </div>
-    <div class="legend-item">
-        <div class="legend-color" style="background: rgba(251, 173, 38, 1);"></div>
-        <span>Jalur Rute</span>
+        <div class="legend-line" style="background: var(--route-blue); height: 6px; border: 1px solid #0022aa;"></div>
+        <span>Jalur Rute Darat</span>
     </div>
 </div>
 
 <script>
     // MASUKKAN TOKEN MAPBOX DI SINI
-    mapboxgl.accessToken = 'YOUR_MAPBOX_ACCESS_TOKEN';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VudGlhd2FuIiwiYSI6ImNseDdoZjBsdDByYTUya3BtdmNmd25nMHQifQ.rLQeC_xQRZFBFKI_jzM69Q';
 
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v12',
-        center: [110.377, -7.769], // Default view area Yogyakarta
-        zoom: 12
+        center: [103.892, 1.154], 
+        zoom: 14 
     });
 
-    // Tambahkan kontrol Zoom In / Zoom Out
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     let startPoint = null;
     let endPoint = null;
-    let startMarker = new mapboxgl.Marker({ color: "#e74c3c" });
+    let startMarker = new mapboxgl.Marker({ color: "#333333" });
 
-    // Fungsi ganti basemap
     function changeBasemap(styleId) {
         map.setStyle('mapbox://styles/mapbox/' + styleId);
     }
 
-    // Tunggu basemap selesai dimuat sebelum memasukkan data Kustom
     map.on('style.load', () => {
+        loadStaticRoutes();
         loadDestinations();
     });
 
-    // Fungsi untuk meload data KMZ yang sudah diconvert ke GeoJSON
+    // Fungsi memuat layer rute statis dari GeoJSON
+    function loadStaticRoutes() {
+        if (!map.getSource('rute-kapal')) {
+            map.addSource('rute-kapal', {
+                type: 'geojson',
+                data: 'data/rute_kapal.geojson' // URL ke rute kapalmu
+            });
+
+            map.addLayer({
+                id: 'rute-kapal-layer',
+                type: 'line',
+                source: 'rute-kapal',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    // Ganti 'jenis_rute' dengan nama kolom yang ada di rute_kapal.geojson mu
+                    'line-color': [
+                        'match',
+                        ['get', 'jenis_rute'], 
+                        'hitam', '#111111', // Value dan warna
+                        'biru', '#0088ff',  // Value dan warna
+                        '#111111' // Fallback jika tidak cocok
+                    ],
+                    'line-width': 3,
+                    // Opsional: bikin garis putus-putus biar beda dengan rute jalan darat
+                    'line-dasharray': [2, 2] 
+                }
+            });
+        }
+    }
+
     function loadDestinations() {
-        // GANTI URL INI dengan file GeoJSON hasil ekstraksi KMZ kamu
-        const geojsonDataUrl = 'data/combined.geojson'; 
-
-        // Karena kamu belum punya link GeoJSON, ini simulasi data sementara
-        const dummyGeoJSON = {
-            "type": "FeatureCollection",
-            "features": [
-                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [110.380, -7.770]}, "properties": {"name": "Destinasi A"}},
-                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [110.365, -7.780]}, "properties": {"name": "Destinasi B"}}
-            ]
-        };
-
         if (!map.getSource('destinations')) {
             map.addSource('destinations', {
                 type: 'geojson',
-                data: dummyGeoJSON // Ganti dengan URL GeoJSON asli jika sudah siap
+                data: 'data/combined.geojson'
             });
 
             map.addLayer({
@@ -146,20 +181,28 @@
                 type: 'circle',
                 source: 'destinations',
                 paint: {
-                    'circle-radius': 8,
-                    'circle-color': '#007cbf',
-                    'circle-stroke-width': 2,
+                    'circle-radius': 7,
+                    'circle-color': [
+                        'match',
+                        ['get', 'type'],
+                        'atraksi', '#e74c3c',
+                        'akses_boat', '#3498db',
+                        'akomodasi', '#f1c40f',
+                        'resto_rekre', '#2ecc71',
+                        'ancilliary', '#9b59b6',
+                        '#ccc'
+                    ],
+                    'circle-stroke-width': 1.5,
                     'circle-stroke-color': '#ffffff'
                 }
             });
         }
     }
 
-    // Event 1: Klik peta untuk menentukan titik awal (Origin)
+    // Event 1: Klik peta untuk titik awal (Start)
     map.on('click', (e) => {
-        // Cek jika yang diklik adalah layer destinasi, biarkan Event 2 yang jalan
         const features = map.queryRenderedFeatures(e.point, { layers: ['destinations-layer'] });
-        if (features.length > 0) return;
+        if (features.length > 0) return; 
 
         startPoint = [e.lngLat.lng, e.lngLat.lat];
         startMarker.setLngLat(startPoint).addTo(map);
@@ -167,35 +210,55 @@
         if (endPoint) getRoute(startPoint, endPoint);
     });
 
-    // Event 2: Klik titik destinasi dari data (Destination)
+    // Event 2: Klik marker destinasi
     map.on('click', 'destinations-layer', (e) => {
         const coords = e.features[0].geometry.coordinates;
-        endPoint = coords;
+        const props = e.features[0].properties;
+        endPoint = [coords[0], coords[1]]; 
         
+        const typeLabels = {
+            'atraksi': 'Atraksi Wisata Tangible',
+            'akses_boat': 'Akses Boat',
+            'akomodasi': 'Akomodasi',
+            'resto_rekre': 'Restoran dan Rekreasi',
+            'ancilliary': 'Ancillary Services'
+        };
+        const labelText = typeLabels[props.type] || props.type;
+
         new mapboxgl.Popup()
             .setLngLat(coords)
-            .setHTML(`<b>${e.features[0].properties.name || 'Destinasi'}</b><br>Klik lokasi awal di peta untuk rute.`)
+            .setHTML(`
+                <div style="text-align:center; color: var(--text-main);">
+                    <b style="font-size:14px;">${props.Name}</b><br>
+                    <span style="font-size:11px; opacity: 0.8;">${labelText}</span>
+                </div>
+            `)
             .addTo(map);
 
         if (startPoint) getRoute(startPoint, endPoint);
     });
 
-    // Ubah cursor saat hover titik destinasi
     map.on('mouseenter', 'destinations-layer', () => { map.getCanvas().style.cursor = 'pointer'; });
     map.on('mouseleave', 'destinations-layer', () => { map.getCanvas().style.cursor = ''; });
 
-    // Mengambil rute dari Mapbox Directions API
+    // Tarik rute mendalam & tebal
     async function getRoute(start, end) {
         const query = await fetch(
             `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`
         );
         const json = await query.json();
+        
+        if (!json.routes || json.routes.length === 0) return;
+
         const data = json.routes[0];
-        const route = data.geometry.coordinates;
+        const baseRoute = data.geometry.coordinates;
+        
+        const fullRouteCoordinates = [start, ...baseRoute, end];
+
         const geojson = {
             type: 'Feature',
             properties: {},
-            geometry: { type: 'LineString', coordinates: route }
+            geometry: { type: 'LineString', coordinates: fullRouteCoordinates }
         };
 
         if (map.getSource('route')) {
@@ -205,27 +268,40 @@
                 type: 'geojson',
                 data: geojson
             });
+
+            // LAYER 1: Casing Rute Darat
+            map.addLayer({
+                id: 'route-casing',
+                type: 'line',
+                source: 'route',
+                layout: { 'line-join': 'round', 'line-cap': 'round' },
+                paint: {
+                    'line-color': '#001188',
+                    'line-width': 9,
+                    'line-opacity': 1
+                }
+            });
+
+            // LAYER 2: Garis Utama Rute Darat
             map.addLayer({
                 id: 'route-layer',
                 type: 'line',
                 source: 'route',
                 layout: { 'line-join': 'round', 'line-cap': 'round' },
                 paint: {
-                    'line-color': 'rgba(251, 173, 38, 1)',
+                    'line-color': '#0055ff',
                     'line-width': 5,
-                    'line-opacity': 0.8
+                    'line-opacity': 1
                 }
             });
         }
         
-        // Auto-zoom fitting rute
         const bounds = new mapboxgl.LngLatBounds(start, start);
         bounds.extend(end);
-        for (const coord of route) { bounds.extend(coord); }
-        map.fitBounds(bounds, { padding: 50 });
+        for (const coord of fullRouteCoordinates) { bounds.extend(coord); }
+        map.fitBounds(bounds, { padding: 60 });
     }
 
-    // Fungsi reset
     function resetRoute() {
         startPoint = null;
         endPoint = null;
