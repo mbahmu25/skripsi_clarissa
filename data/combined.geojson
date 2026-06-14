@@ -1,0 +1,26 @@
+{
+"type": "FeatureCollection",
+"name": "combined",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4979" } },
+"features": [
+{ "type": "Feature", "properties": { "Name": "POS AL Sambu", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8929656, 1.1536256, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Polsek Belakang Padang", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8922495, 1.1543286, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Vihara Dharma Bakti", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8898679, 1.1557627, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Kantor Imigrasi Kelas II Belakang Padang Lama", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8937194, 1.152916, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Kantor Camat Pertama Belakang Padang", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8937925, 1.1526027, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Makam Sunan Thulub", "type": "atraksi" }, "geometry": { "type": "Point", "coordinates": [ 103.8660464, 1.1639982, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Bank & ATM BRK Syariah", "type": "ancilliary" }, "geometry": { "type": "Point", "coordinates": [ 103.8913669, 1.1552473, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Teras ATM BRI", "type": "ancilliary" }, "geometry": { "type": "Point", "coordinates": [ 103.8920382, 1.1548559, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Kantor Pos Belakang Padang", "type": "ancilliary" }, "geometry": { "type": "Point", "coordinates": [ 103.8870644, 1.1575181, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Puskesmas Belakang Padang", "type": "ancilliary" }, "geometry": { "type": "Point", "coordinates": [ 103.8890621, 1.1560745, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Homestay Tiara", "type": "akomodasi" }, "geometry": { "type": "Point", "coordinates": [ 103.8913268, 1.1552721, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Hotel Asiya", "type": "akomodasi" }, "geometry": { "type": "Point", "coordinates": [ 103.8860739, 1.1514508, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Homestay Belakang Padang", "type": "akomodasi" }, "geometry": { "type": "Point", "coordinates": [ 103.8950664, 1.1499344, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Bungsu Family Cafe", "type": "resto_rekre" }, "geometry": { "type": "Point", "coordinates": [ 103.8924088, 1.1547272, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Lang-lang Laut", "type": "resto_rekre" }, "geometry": { "type": "Point", "coordinates": [ 103.8928716, 1.1541198, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Cafe Jom Mari", "type": "resto_rekre" }, "geometry": { "type": "Point", "coordinates": [ 103.8779992, 1.1412608, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Kedai Kopi Ameng", "type": "resto_rekre" }, "geometry": { "type": "Point", "coordinates": [ 103.8917719, 1.1551334, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Pelabuhan Domestik Belakang Padang", "type": "akses_boat" }, "geometry": { "type": "Point", "coordinates": [ 103.8934645, 1.1557757, 0.0 ] } },
+{ "type": "Feature", "properties": { "Name": "Pelabuhan Bot Pancung Sekupang", "type": "akses_boat" }, "geometry": { "type": "Point", "coordinates": [ 103.9277596, 1.1260477, 0.0 ] } }
+]
+}
